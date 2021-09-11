@@ -4,8 +4,9 @@ namespace Keepr.Models
   {
     public int Id { get; set; }
     public string CreatorId { get; set; }
+    public string Name { get; set; }
     public string Description { get; set; }
-    public bool IsPrivate { get; set; }
+    public bool? IsPrivate { get; set; } = true;
     public Profile Creator { get; set; }
   }
 }

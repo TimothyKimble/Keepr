@@ -20,11 +20,12 @@ CREATE TABLE IF NOT EXISTS keeps(
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
 CREATE TABLE IF NOT EXISTS vaults(
-  id VARCHAR(255) NOT NULL primary key COMMENT 'primary key',
+  id INT NOT NULL AUTO_INCREMENT primary key COMMENT 'primary key',
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
   creatorId VARCHAR(255) NOT NULL COMMENT 'Account Id for Creator',
-  description VARCHAR(2000) COMMENT 'vault description',
-  isPrivate TINYINT COMMENT 'Bool value for IsPrivate',
+  name VARCHAR(255) NOT NULL COMMENT 'Vault name',
+  description VARCHAR(2000) NOT NULL COMMENT 'vault description',
+  isPrivate TINYINT NOT NULL COMMENT 'Bool value for IsPrivate',
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
