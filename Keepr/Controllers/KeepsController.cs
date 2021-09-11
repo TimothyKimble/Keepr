@@ -33,7 +33,7 @@ namespace Keepr.Controllers
         return BadRequest(err.Message);
       }
     }
-
+    // NOTE Create a Keep
     [HttpPost]
     [Authorize]
     public async Task<ActionResult<Keep>> Create([FromBody] Keep newKeep)
@@ -52,5 +52,53 @@ namespace Keepr.Controllers
       }
     }
 
+    [HttpGet("{id}")]
+
+    public ActionResult<Keep> Get(int id)
+    {
+      try
+      {
+        Keep keep = _service.GetKeepById(id);
+        return Ok(keep);
+      }
+      catch (Exception err)
+      {
+        return BadRequest(err.Message);
+      }
+    }
+
+    [HttpPut("{id}")]
+    [Authorize]
+    public async Task<ActionResult<Keep>> Update(int id, [FromBody] Keep editedKeep)
+    {
+      try
+      {
+        Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+        editedKeep.CreatorId = userInfo.Id;
+        editedKeep.Id = id;
+        Keep keep = _service.Update(editedKeep);
+        return Ok(keep);
+      }
+      catch (Exception err)
+      {
+        return BadRequest(err.Message);
+      }
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    public async Task<ActionResult<Keep>> Delete(int id)
+    {
+      try
+      {
+        Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+        Keep Keep = _service.Delete(id, userInfo.Id);
+        return Ok(Keep);
+      }
+      catch (Exception err)
+      {
+        return BadRequest(err.Message);
+      }
+    }
   }
 }
