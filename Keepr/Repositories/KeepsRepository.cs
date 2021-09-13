@@ -19,9 +19,15 @@ namespace Keepr.Repositories
     {
       string sql = @"
       SELECT
-      *
-      FROM keeps";
-      return _db.Query<Keep>(sql).ToList();
+      a.*,
+      k.*
+      FROM keeps k
+      JOIN accounts a ON a.id = k.creatorId;";
+      return _db.Query<Profile, Keep, Keep>(sql, (prof, keep) =>
+      {
+        keep.Creator = prof;
+        return keep;
+      }, splitOn: "id").ToList<Keep>();
     }
 
     public Keep Create(Keep newKeep)

@@ -15,14 +15,37 @@ namespace Keepr.Repositories
       _db = db;
     }
 
-    public List<Vault> GetVaults()
+    internal List<Vault> GetVaults()
     {
       string sql = @"
-      SELECT * FROM vaults;";
-      return _db.Query<Vault>(sql).ToList();
+      SELECT
+      a.*,
+      v.*
+      FROM vaults v
+      JOIN accounts a ON a.id = v.creatorId;";
+      return _db.Query<Profile, Vault, Vault>(sql, (prof, vault) =>
+      {
+        vault.Creator = prof;
+        return vault;
+      }, splitOn: "id").ToList<Vault>();
+    }
+    internal List<Vault> GetVaults(string creatorId)
+    {
+      string sql = @"
+      SELECT
+      a.*,
+      v.*
+      FROM vaults v
+      JOIN accounts a ON a.id = v.creatorId
+      WHERE v.creatorId = @creatorId;";
+      return _db.Query<Profile, Vault, Vault>(sql, (prof, vault) =>
+      {
+        vault.Creator = prof;
+        return vault;
+      }, new { creatorId }, splitOn: "id").ToList<Vault>();
     }
 
-    public Vault GetVaultById(int id)
+    internal Vault GetVaultById(int id)
     {
       string sql = @"
       SELECT
@@ -38,7 +61,7 @@ namespace Keepr.Repositories
      }, new { id }, splitOn: "id").FirstOrDefault();
     }
 
-    public Vault Create(Vault newVault)
+    internal Vault Create(Vault newVault)
     {
       string sql = @"
       INSERT INTO vaults
@@ -50,18 +73,36 @@ namespace Keepr.Repositories
       return newVault;
     }
 
-    public Vault Update(Vault original)
+    internal Vault Update(Vault original)
     {
       string sql = @"
         UPDATE vaults
         SET
             name = @Name,
-            description = @Description, 
+            description = @Description,
+            img = @Img, 
             isPrivate = @IsPrivate
         WHERE id = @Id;
       ";
       _db.Execute(sql, original);
       return GetVaultById(original.Id);
+    }
+
+    internal VaultKeep GetVaultKeepsById(int id)
+    {
+      string sql = @"
+      SELECT
+      v.*,
+      k.*
+      FROM vaults v
+      JOIN keeps k ON v.creatorId = @id
+      WHERE v.id = @id;";
+      return _db.Query<Profile, VaultKeep, VaultKeep>(sql, (prof, vaultKeep) =>
+           {
+             vaultKeep.CreatorId = prof.Id;
+             return vaultKeep;
+           }, new { id }, splitOn: "id").FirstOrDefault();
+
     }
 
     internal void Delete(int id)

@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
       <div class="d-flex flex-column align-items-center">
         <img
@@ -120,7 +120,8 @@ a:hover {
 .nav-link{
   text-transform: uppercase;
 }
-.nav-item .nav-link.router-link-exact-active{
-  color: var(--primary);
+a {
+  text-decoration: none;
+ color: inherit ;
 }
 </style>
