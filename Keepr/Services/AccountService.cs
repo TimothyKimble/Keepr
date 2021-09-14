@@ -1,4 +1,3 @@
-using System;
 using Keepr.Models;
 using Keepr.Repositories;
 
@@ -30,14 +29,9 @@ namespace Keepr.Services
       return profile;
     }
 
-    internal Account GetProfileById(int id)
+    internal Account GetProfileById(string id)
     {
-      Account foundAccount = _repo.GetAccountById(id);
-      if (foundAccount == null)
-      {
-        throw new Exception("invalid Id");
-      }
-      return foundAccount;
+      return _repo.GetById(id);
     }
 
     internal Account Edit(Account editData, string userEmail)

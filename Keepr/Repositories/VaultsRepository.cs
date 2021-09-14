@@ -15,36 +15,6 @@ namespace Keepr.Repositories
       _db = db;
     }
 
-    internal List<Vault> GetVaults()
-    {
-      string sql = @"
-      SELECT
-      a.*,
-      v.*
-      FROM vaults v
-      JOIN accounts a ON a.id = v.creatorId;";
-      return _db.Query<Profile, Vault, Vault>(sql, (prof, vault) =>
-      {
-        vault.Creator = prof;
-        return vault;
-      }, splitOn: "id").ToList<Vault>();
-    }
-    internal List<Vault> GetVaults(string creatorId)
-    {
-      string sql = @"
-      SELECT
-      a.*,
-      v.*
-      FROM vaults v
-      JOIN accounts a ON a.id = v.creatorId
-      WHERE v.creatorId = @creatorId;";
-      return _db.Query<Profile, Vault, Vault>(sql, (prof, vault) =>
-      {
-        vault.Creator = prof;
-        return vault;
-      }, new { creatorId }, splitOn: "id").ToList<Vault>();
-    }
-
     internal Vault GetVaultById(int id)
     {
       string sql = @"
@@ -71,6 +41,22 @@ namespace Keepr.Repositories
       SELECT LAST_INSERT_ID();";
       newVault.Id = _db.ExecuteScalar<int>(sql, newVault);
       return newVault;
+    }
+
+    internal List<Vault> GetByCreator(string id)
+    {
+      string sql = @"
+      SELECT
+      a.*,
+      v.*
+      FROM vaults v
+      JOIN accounts a ON a.id = v.creatorId
+      WHERE v.creatorId = @id;";
+      return _db.Query<Profile, Vault, Vault>(sql, (prof, vault) =>
+      {
+        vault.Creator = prof;
+        return vault;
+      }, new { id }, splitOn: "id").ToList<Vault>();
     }
 
     internal Vault Update(Vault original)

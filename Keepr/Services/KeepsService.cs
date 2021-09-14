@@ -62,5 +62,16 @@ namespace Keepr.Services
       _repo.Delete(keepId);
       return keepToDelete;
     }
+
+    internal List<Keep> GetKeepsByCreator(string id)
+    {
+      List<Keep> keeps = _repo.GetKeepsByCreator(id);
+      return keeps;
+    }
+
+    internal List<KeepViewModel> GetKeepsByVaultId(int id)
+    {
+      return _repo.GetKeepByVaultId(id);
+    }
   }
 }

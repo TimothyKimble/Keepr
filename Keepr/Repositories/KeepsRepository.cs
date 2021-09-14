@@ -73,6 +73,40 @@ namespace Keepr.Repositories
       return GetKeepById(original.Id);
     }
 
+    internal List<Keep> GetKeepsByCreator(string id)
+    {
+      string sql = @"
+      SELECT
+      a.*,
+      k.*
+      FROM keeps k
+      JOIN accounts a ON a.id = k.creatorId
+      WHERE k.creatorId = @id;";
+      return _db.Query<Profile, Keep, Keep>(sql, (prof, keep) =>
+      {
+        keep.Creator = prof;
+        return keep;
+      }, new { id }, splitOn: "id").ToList<Keep>();
+    }
+
+    internal List<KeepViewModel> GetKeepByVaultId(int id)
+    {
+      string sql = @"
+      SELECT
+      a.*,
+      k.*
+      vk.id AS vaultKeepId
+      FROM vaultKeeps vk
+      JOIN accounts a ON vk.creatorId = a.id
+      JOIN keeps k on vk.keepId = k.id
+      WHERE vk.vaultId = @id;";
+      return _db.Query<Profile, KeepViewModel, KeepViewModel>(sql, (prof, keep) =>
+      {
+        keep.Creator = prof;
+        return keep;
+      }, new { id }, splitOn: "id").ToList();
+    }
+
     internal void Delete(int id)
     {
       string sql = "DELETE FROM keeps WHERE id = @id LIMIT 1;";

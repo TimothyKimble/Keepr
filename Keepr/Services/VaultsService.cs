@@ -13,19 +13,12 @@ namespace Keepr.Services
     {
       _repo = repo;
     }
-
-    internal List<Vault> GetVaults()
-    {
-      List<Vault> vault = _repo.GetVaults();
-      return vault.FindAll(v => v.IsPrivate == false);
-    }
-
-    internal Vault GetVaultById(int id, bool careIfPrivate = true)
+    internal Vault GetVaultById(int id, bool careIfPrivate = false)
     {
       Vault found = _repo.GetVaultById(id);
-      if (found == null || careIfPrivate && found.IsPrivate == true)
+      if (found == null || (careIfPrivate == true && found.IsPrivate == true))
       {
-        throw new Exception("Invalid Id");
+        throw new Exception("This isn't for you");
       }
       return found;
     }
@@ -37,7 +30,7 @@ namespace Keepr.Services
 
     internal Vault Update(Vault editedVault)
     {
-      Vault original = GetVaultById(editedVault.Id);
+      Vault original = GetVaultById(editedVault.Id, true);
       if (original.CreatorId != editedVault.CreatorId)
       {
         throw new Exception("Invalid Access");
@@ -50,16 +43,10 @@ namespace Keepr.Services
       return original;
     }
 
-    internal VaultKeep GetVaultKeepsById(int id)
+    internal List<Vault> GetVaultsByCreator(string id, Account userInfo)
     {
-      VaultKeep vaultkeeps = _repo.GetVaultKeepsById(id);
-      return vaultkeeps;
-    }
-
-    internal List<Vault> GetVaultsByCreator(string creatorId, bool careIfPrivate = true)
-    {
-      List<Vault> vaults = _repo.GetVaults(creatorId);
-      if (careIfPrivate)
+      List<Vault> vaults = _repo.GetByCreator(id);
+      if (userInfo == null)
       {
         vaults = vaults.FindAll(v => v.IsPrivate == false);
       }

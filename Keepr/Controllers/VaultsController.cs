@@ -15,19 +15,31 @@ namespace Keepr.Controllers
   public class VaultsController : ControllerBase
   {
     private readonly VaultsService _service;
+    private readonly KeepsService _keepsService;
 
-    public VaultsController(VaultsService service)
+    public VaultsController(VaultsService service, KeepsService keepsService)
     {
       _service = service;
+      _keepsService = keepsService;
     }
 
-    [HttpGet]
-    public ActionResult<List<Vault>> Get()
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Vault>> GetVaultById(int id)
     {
       try
       {
-        List<Vault> vaults = _service.GetVaults();
-        return Ok(vaults);
+        Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+        if (userInfo == null)
+        {
+          Vault privateVaults = _service.GetVaultById(id, true);
+          return Ok(privateVaults);
+        }
+        Vault vault = _service.GetVaultById(id, false);
+        if (vault.CreatorId != userInfo.Id && vault.IsPrivate == true)
+        {
+          throw new Exception("Not for you");
+        }
+        return Ok(vault);
       }
       catch (Exception err)
       {
@@ -35,13 +47,27 @@ namespace Keepr.Controllers
       }
     }
 
-    [HttpGet("{id}")]
-    public ActionResult<Vault> GetVaultById(int id)
+    [HttpGet("{id}/keeps")]
+    public async Task<ActionResult<List<KeepViewModel>>> GetKeeps(int id)
     {
       try
       {
+        Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
         Vault vault = _service.GetVaultById(id);
-        return Ok(vault);
+        if (vault.IsPrivate == true && userInfo == null)
+        {
+          throw new Exception("Not for you");
+        }
+        List<KeepViewModel> vaultKeep = _keepsService.GetKeepsByVaultId(id);
+        if (userInfo != null)
+        {
+          if (vault.CreatorId != userInfo.Id)
+          {
+            throw new Exception("Not for You");
+          }
+        }
+        return Ok(vaultKeep);
+
       }
       catch (Exception err)
       {
@@ -78,6 +104,7 @@ namespace Keepr.Controllers
         editedVault.CreatorId = userInfo.Id;
         editedVault.Id = id;
         Vault vault = _service.Update(editedVault);
+        editedVault.Creator = userInfo;
         return Ok(vault);
       }
       catch (Exception err)

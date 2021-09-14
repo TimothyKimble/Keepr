@@ -36,13 +36,6 @@ namespace Keepr.Repositories
       return newAccount;
     }
 
-    internal Account GetAccountById(int id)
-    {
-      string sql = @"
-      SELECT * FROM accounts WHERE accounts.id = @id";
-      return _db.QueryFirstOrDefault<Account>(sql, new { id });
-    }
-
     internal Account Edit(Account update)
     {
       string sql = @"

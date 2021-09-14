@@ -7,20 +7,44 @@ namespace Keepr.Services
   public class VaultKeepsService
   {
     private readonly VaultKeepsRepository _repo;
+    private readonly VaultsRepository _vaultsRepository;
+    private readonly KeepsRepository _keepsRepository;
 
-    public VaultKeepsService(VaultKeepsRepository repo)
+    public VaultKeepsService(VaultKeepsRepository repo, VaultsRepository vaultsRepository, KeepsRepository keepsRepository)
     {
       _repo = repo;
+      _vaultsRepository = vaultsRepository;
+      _keepsRepository = keepsRepository;
     }
 
     internal VaultKeep Create(VaultKeep newVaultKeep)
     {
-      VaultKeep vaultKeep = _repo.Create(newVaultKeep);
-      if (vaultKeep == null)
+      Vault vault = _vaultsRepository.GetVaultById(newVaultKeep.VaultId);
+      if (vault.CreatorId != newVaultKeep.CreatorId)
       {
         throw new Exception("invalid Id");
       }
-      return vaultKeep;
+      return _repo.Create(newVaultKeep);
+    }
+
+    private VaultKeep GetById(int id)
+    {
+      VaultKeep found = _repo.GetById(id);
+      if (found == null)
+      {
+        throw new Exception("Invalid Id");
+      }
+      return found;
+    }
+
+    internal void Delete(int id, string userId)
+    {
+      VaultKeep toDelete = GetById(id);
+      if (toDelete.CreatorId != userId)
+      {
+        throw new Exception("This isn't yours");
+      }
+      _repo.Delete(id);
     }
   }
 }

@@ -23,6 +23,18 @@ namespace Keepr.Repositories
       SELECT LAST_INSERT_ID();";
       newVaultKeep.Id = _db.ExecuteScalar<int>(sql, newVaultKeep);
       return newVaultKeep;
+
+    }
+    internal void Delete(int id)
+    {
+      string sql = "DELETE FROM vaultKeeps WHERE id = @id LIMIT 1";
+      _db.Execute(sql, new { id });
+    }
+
+    internal VaultKeep GetById(int id)
+    {
+      string sql = "SELECT * FROM vaultKeeps WHERE id = @id;";
+      return _db.QueryFirstOrDefault<VaultKeep>(sql, new { id });
     }
   }
 }

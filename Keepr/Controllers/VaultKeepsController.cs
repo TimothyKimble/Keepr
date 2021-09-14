@@ -13,12 +13,12 @@ namespace Keepr.Controllers
   public class VaultKeepsController : ControllerBase
   {
     private readonly VaultKeepsService _service;
-    private readonly VaultsService _vs;
+    private readonly VaultsService _vaultsService;
 
-    public VaultKeepsController(VaultKeepsService service, VaultsService vs)
+    public VaultKeepsController(VaultKeepsService service, VaultsService vaultsService)
     {
       _service = service;
-      _vs = vs;
+      _vaultsService = vaultsService;
     }
 
     [HttpPost]
@@ -39,14 +39,15 @@ namespace Keepr.Controllers
       }
     }
 
-    [HttpGet("{id}")]
-
-    public ActionResult<VaultKeep> Get(int id)
+    [HttpDelete("{id}")]
+    [Authorize]
+    public async Task<ActionResult<String>> Delete(int id)
     {
       try
       {
-        VaultKeep vaultKeeps = _vs.GetVaultKeepsById(id);
-        return Ok(vaultKeeps);
+        Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+        _service.Delete(id, userInfo.Id);
+        return Ok("Deleted");
       }
       catch (Exception err)
       {
