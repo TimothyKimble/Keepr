@@ -1,6 +1,8 @@
 <template>
-  <div class="row m-0 w-100">
-    <KeepsCard v-for="k in keeps" :key="k.id" :keep="k" />
+  <div class="container-fluid p-0">
+    <div class="card-columns">
+      <KeepsCard v-for="k in keeps" :key="k.id" :keep="k" />
+    </div>
   </div>
 </template>
 
@@ -26,12 +28,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.home{
-  text-align: center;
-  user-select: none;
-  > img{
-    height: 200px;
-    width: 200px;
-  }
-}
+
 </style>

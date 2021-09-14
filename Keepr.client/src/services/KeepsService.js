@@ -12,6 +12,15 @@ class KeepsService {
       logger.error("Couldn't get Keeps", error)
     }
   }
+
+  async createKeep(newKeep) {
+    try {
+      const res = await api.post('api/keeps', newKeep)
+      AppState.keeps.push(res.data)
+    } catch (error) {
+      logger.error("Couldn't Post keep", error)
+    }
+  }
 }
 
 export const keepsService = new KeepsService()
