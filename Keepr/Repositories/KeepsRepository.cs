@@ -94,7 +94,7 @@ namespace Keepr.Repositories
       string sql = @"
       SELECT
       a.*,
-      k.*
+      k.*,
       vk.id AS vaultKeepId
       FROM vaultKeeps vk
       JOIN accounts a ON vk.creatorId = a.id

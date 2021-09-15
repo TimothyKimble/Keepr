@@ -20,7 +20,6 @@ namespace Keepr.Controllers
       _service = service;
       _vaultsService = vaultsService;
     }
-
     [HttpPost]
     [Authorize]
 

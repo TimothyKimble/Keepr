@@ -27,7 +27,7 @@ namespace Keepr.Services
       return _repo.Create(newVaultKeep);
     }
 
-    private VaultKeep GetById(int id)
+    internal VaultKeep GetById(int id)
     {
       VaultKeep found = _repo.GetById(id);
       if (found == null)
