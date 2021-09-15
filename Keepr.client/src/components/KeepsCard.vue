@@ -1,5 +1,5 @@
 <template>
-  <div class="component card grow" data-toggle="modal" :data-target="'#modal' + keep.id">
+  <div class="component card grow border border-dark rounded" data-toggle="modal" :data-target="'#modal' + keep.id">
     <img class="card-img" :src="keep.img" alt="">
     <div class="card-img-overlay d-flex justify-content-between align-items-end">
       <h4 class="card-title text-light text-shadow">
@@ -52,6 +52,12 @@
                 <div class="col-md-12 p-2">
                   <p>{{ keep.description }}</p>
                 </div>
+                <div class="col-md-12 p-2 d-flex justify-content-between">
+                  <div class="btn btn-success">
+                    For Vault
+                  </div>
+                  <img :src="keep.creator.picture" class="profileImage rounded-circle " alt="">
+                </div>
               </div>
             </div>
           </div>
@@ -91,6 +97,9 @@ transition: all .3s ease-in-out;
 .grow:hover {
 transform: scale(1.02);
 cursor: pointer;
+}
+.rounded {
+  border-radius: 50%;
 }
 
 </style>

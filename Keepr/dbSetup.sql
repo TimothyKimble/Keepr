@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS vaults(
   creatorId VARCHAR(255) NOT NULL COMMENT 'Account Id for Creator',
   name VARCHAR(255) NOT NULL COMMENT 'vault name',
   description VARCHAR(2000) NOT NULL COMMENT 'vault description',
-  img VARCHAR(2000) COMMENT 'vault img',
+  img VARCHAR(2000) NOT NULL COMMENT 'vault img',
   isPrivate TINYINT NOT NULL COMMENT 'Bool value for IsPrivate',
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';

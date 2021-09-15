@@ -18,6 +18,12 @@ class AccountService {
     AppState.keeps = res.data
     return AppState.keeps
   }
+
+  async getAccountVaults(id) {
+    const res = await api.get('api/profiles/' + id + '/vaults')
+    AppState.vaults = res.data
+    return AppState.vaults
+  }
 }
 
 export const accountService = new AccountService()
