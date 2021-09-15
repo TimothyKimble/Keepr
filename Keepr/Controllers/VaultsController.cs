@@ -55,7 +55,7 @@ namespace Keepr.Controllers
         Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
         Vault vault = _service.GetVaultById(id);
         List<KeepViewModel> vaultKeep = _keepsService.GetKeepsByVaultId(vault.Id);
-        if (vault.CreatorId != userInfo.Id && vault.IsPrivate == true)
+        if (vault.CreatorId != userInfo?.Id && vault.IsPrivate == true)
         {
           throw new Exception("Not for You");
         }

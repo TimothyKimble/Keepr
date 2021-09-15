@@ -1,12 +1,15 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
-      <div class="d-flex flex-column align-items-center">
+      <div class="d-flex align-items-center">
         <img
           alt="logo"
-          src="../assets/img/cw-logo.png"
+          src="../assets/img/keyLogo.png"
           height="45"
         />
+        <h3 class="px-2">
+          Keepr
+        </h3>
       </div>
     </router-link>
     <button

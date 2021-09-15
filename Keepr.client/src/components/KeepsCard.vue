@@ -5,7 +5,9 @@
       <h4 class="card-title text-light text-shadow">
         {{ keep.name }}
       </h4>
+      <!-- <router-link :to="{name: 'ProfilePage', params:{id: keep.creator.id}}"> -->
       <img class="rounded-circle profileImage" :src="keep.creator.picture" alt="">
+      <!-- </router-link> -->
     </div>
   </div>
   <!-- NOTE Keep Details Modal -->
@@ -52,11 +54,17 @@
                 <div class="col-md-12 p-2">
                   <p>{{ keep.description }}</p>
                 </div>
-                <div class="col-md-12 p-2 d-flex justify-content-between">
-                  <div class="btn btn-success">
-                    For Vault
+                <div class="col-md-12 p-0 d-flex justify-content-between">
+                  <div class="row m-0 w-100">
+                    <div class="col-md-8 p-0">
+                      <select class="w-100">
+                        <VaultDropDown v-for="v in accountVaults" :key="v.id" :vault="v" />
+                      </select>
+                    </div>
+                    <!-- <router-link :to="{name: 'Profile', params:{id: keep.creator.id}}"> -->
+                    <img @click="pushtoProfilePage(keep.creator.id, keep.id)" :src="keep.creator.picture" class="profileImage rounded-circle " alt="">
                   </div>
-                  <img :src="keep.creator.picture" class="profileImage rounded-circle " alt="">
+                  <!-- </router-link> -->
                 </div>
               </div>
             </div>
@@ -68,6 +76,11 @@
 </template>
 
 <script>
+import $ from 'jquery'
+import { router } from '../router'
+import { computed, onMounted } from '@vue/runtime-core'
+import { AppState } from '../AppState'
+import { accountService } from '../services/AccountService'
 export default {
   props: {
     keep: {
@@ -76,7 +89,16 @@ export default {
     }
   },
   setup() {
-    return {}
+    onMounted(async() => {
+      await accountService.getAccountVaults(AppState.account.id)
+    })
+    return {
+      pushtoProfilePage(id, keepId) {
+        router.push(`/profiles/${id}`)
+        $('#modal' + keepId).modal('hide')
+      },
+      accountVaults: computed(() => AppState.accountVaults)
+    }
   }
 }
 
@@ -99,7 +121,7 @@ transform: scale(1.02);
 cursor: pointer;
 }
 .rounded {
-  border-radius: 50%;
+  border-radius: 10%;
 }
 
 </style>
