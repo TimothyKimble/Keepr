@@ -21,8 +21,9 @@ class AccountService {
 
   async getAccountVaults(id) {
     const res = await api.get('api/profiles/' + id + '/vaults')
+    logger.log(res.data)
     AppState.accountVaults = res.data
-    return AppState.vaults
+    return AppState.accountVaults
   }
 }
 

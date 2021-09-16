@@ -1,14 +1,14 @@
 <template>
-  <option @click="createVaultKeep()">
+  <button @click="createVaultKeep(vault)" class="dropdown-item">
     {{ vault.name }}
-  </option>
+  </button>
 </template>
 
 <script>
-import { computed } from '@vue/runtime-core'
+import { reactive } from '@vue/runtime-core'
 import { AppState } from '../AppState'
 import Pop from '../utils/Notifier'
-import { logger } from '../utils/Logger'
+import { vaultKeepsService } from '../services/VaultKeepsService'
 export default {
   name: 'Component',
   props: {
@@ -18,9 +18,20 @@ export default {
     }
   },
   setup() {
+    const state = reactive({
+      newVaultKeep: {}
+    })
     return {
-      createVaultKeep() {
-        logger.log('Connected')
+      state,
+      async createVaultKeep(vault) {
+        try {
+          state.newVaultKeep.vaultId = vault.id
+          state.newVaultKeep.keepId = AppState.activeKeep.id
+          await vaultKeepsService.createVaultKeep(state.newVaultKeep)
+          Pop.toast('Created VaultKeep', 'success')
+        } catch (error) {
+          Pop.toast('Did not create vaultKeep', 'error')
+        }
       }
     }
   },

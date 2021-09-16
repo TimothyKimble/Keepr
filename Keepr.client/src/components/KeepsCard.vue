@@ -1,5 +1,5 @@
 <template>
-  <div class="component card grow border border-dark rounded" data-toggle="modal" :data-target="'#modal' + keep.id">
+  <div @click="changeActiveKeep(keep)" class="component card grow border border-dark rounded" data-toggle="modal" :data-target="'#modal' + keep.id">
     <img class="card-img" :src="keep.img" alt="">
     <div class="card-img-overlay d-flex justify-content-between align-items-end">
       <h4 class="card-title text-light text-shadow">
@@ -56,10 +56,19 @@
                 </div>
                 <div class="col-md-12 p-0 d-flex justify-content-between">
                   <div class="row m-0 w-100">
-                    <div class="col-md-8 p-0">
-                      <select class="w-100">
+                    <div class="col-md-8 p-0 dropdown">
+                      <button class="btn btn-primary dropdown-toggle"
+                              type="button"
+                              id="dropdownMenu2"
+                              data-toggle="dropdown"
+                              aria-haspopup="true"
+                              aria-expanded="false"
+                      >
+                        Dropdown
+                      </button>
+                      <div class="w-100 dropdown-menu" aria-labelledby="dropdownMenu2">
                         <VaultDropDown v-for="v in accountVaults" :key="v.id" :vault="v" />
-                      </select>
+                      </div>
                     </div>
                     <!-- <router-link :to="{name: 'Profile', params:{id: keep.creator.id}}"> -->
                     <img @click="pushtoProfilePage(keep.creator.id, keep.id)" :src="keep.creator.picture" class="profileImage rounded-circle " alt="">
@@ -78,8 +87,9 @@
 <script>
 import $ from 'jquery'
 import { router } from '../router'
-import { computed, onMounted } from '@vue/runtime-core'
+import { computed } from '@vue/runtime-core'
 import { AppState } from '../AppState'
+import { logger } from '../utils/Logger'
 import { accountService } from '../services/AccountService'
 export default {
   props: {
@@ -89,13 +99,16 @@ export default {
     }
   },
   setup() {
-    onMounted(async() => {
-      await accountService.getAccountVaults(AppState.account.id)
-    })
     return {
       pushtoProfilePage(id, keepId) {
         router.push(`/profiles/${id}`)
         $('#modal' + keepId).modal('hide')
+      },
+      async changeActiveKeep(keep) {
+        await accountService.getAccountVaults(AppState.account.id)
+        AppState.activeKeep = keep
+        logger.log(AppState.activeKeep)
+        logger.log(AppState.accountVaults)
       },
       accountVaults: computed(() => AppState.accountVaults)
     }
