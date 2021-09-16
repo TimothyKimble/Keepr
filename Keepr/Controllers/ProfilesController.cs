@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using CodeWorks.Auth0Provider;
 using Keepr.Models;
 using Keepr.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Keepr.Controllers
@@ -40,7 +39,6 @@ namespace Keepr.Controllers
 
 
     [HttpGet("{id}/vaults")]
-    [Authorize]
     public async Task<ActionResult<List<Vault>>> GetVaults(string id)
     {
       try
