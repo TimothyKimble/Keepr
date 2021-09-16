@@ -17,7 +17,7 @@
         </h3>
       </div>
       <div class="card-columns">
-        <VaultsCard v-for="v in vaults" :key="v.id" :vault="v" />
+        <VaultsCard v-for="v in vaults.filter(v => v.isPrivate !== true) " :key="v.id" :vault="v" />
       </div>
     </div>
     <div class="row m-0 w-100 mt-5">

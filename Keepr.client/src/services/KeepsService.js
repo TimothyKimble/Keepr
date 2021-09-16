@@ -1,6 +1,9 @@
 import { AppState } from '../AppState'
 import { api } from './AxiosService'
 import { logger } from '../utils/Logger'
+import Pop from '../utils/Notifier'
+import { router } from '../router'
+import $ from 'jquery'
 
 class KeepsService {
   async getKeeps() {
@@ -13,12 +16,36 @@ class KeepsService {
     }
   }
 
+  async getKeepById(id) {
+    try {
+      const res = await api.get('api/keeps/' + id)
+      logger.log(res.data)
+      AppState.keeps.push(res.data)
+      return AppState.keeps
+    } catch (error) {
+      logger.error("Couldn't get Keep", error)
+    }
+  }
+
   async createKeep(newKeep) {
     try {
       const res = await api.post('api/keeps', newKeep)
       AppState.keeps.push(res.data)
     } catch (error) {
       logger.error("Couldn't Post keep", error)
+    }
+  }
+
+  async deleteKeep(keepId) {
+    try {
+      if (await Pop.confirm()) {
+        await api.delete('api/keeps/' + keepId)
+        $('#modal' + keepId).modal('hide')
+        router.push('/')
+        Pop.toast('Deleted Keep!', 'success')
+      }
+    } catch (error) {
+      logger.error("Couldn't Delete Keep", error)
     }
   }
 }

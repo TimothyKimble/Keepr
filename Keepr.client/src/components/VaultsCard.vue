@@ -1,5 +1,5 @@
 <template>
-  <div class="component card grow" data-toggle="modal" :data-target="'#modal' + vault.id">
+  <div @click="pushToVaultPage(vault)" class="component card grow">
     <img class="card-img" :src="vault.img" alt="">
     <div class="card-img-overlay d-flex justify-content-between align-items-end">
       <h4 class="card-title text-light text-shadow">
@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { AppState } from '../AppState'
+import { router } from '../router'
 export default {
   props: {
     vault: {
@@ -19,7 +21,17 @@ export default {
     }
   },
   setup() {
-    return {}
+    return {
+      pushToVaultPage(vault) {
+        if (AppState.account.id === vault.creator.id && vault.isPrivate === true) {
+          router.push(`/vaults/${vault.id}/keeps`)
+        } else if (vault.isPrivate === false) {
+          router.push(`/vaults/${vault.id}/keeps`)
+        } else {
+          router.push('/')
+        }
+      }
+    }
   }
 }
 

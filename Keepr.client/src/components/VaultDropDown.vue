@@ -25,6 +25,8 @@ export default {
       state,
       async createVaultKeep(vault) {
         try {
+          await vaultKeepsService.increaseKeeps(AppState.activeKeep)
+          state.newVaultKeep.Creator = AppState.activeKeep.Creator
           state.newVaultKeep.vaultId = vault.id
           state.newVaultKeep.keepId = AppState.activeKeep.id
           await vaultKeepsService.createVaultKeep(state.newVaultKeep)

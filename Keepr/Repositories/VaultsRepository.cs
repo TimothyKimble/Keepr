@@ -74,19 +74,21 @@ namespace Keepr.Repositories
       return GetVaultById(original.Id);
     }
 
-    internal VaultKeep GetVaultKeepsById(int id)
+    internal KeepViewModel GetVaultKeepsById(int id)
     {
       string sql = @"
       SELECT
-      v.*,
-      k.*
+      k.*,
+      v.id AS vaultKeepId,
+      a.*
       FROM vaults v
-      JOIN keeps k ON v.creatorId = @id
-      WHERE v.id = @id;";
-      return _db.Query<Profile, VaultKeep, VaultKeep>(sql, (prof, vaultKeep) =>
+      JOIN keeps k ON k.id = v.keepId
+      JOIN accounts a ON a.id = k.creatorId
+      WHERE vaultId = @id;";
+      return _db.Query<Profile, KeepViewModel, KeepViewModel>(sql, (prof, vault) =>
            {
-             vaultKeep.CreatorId = prof.Id;
-             return vaultKeep;
+             vault.Creator = prof;
+             return vault;
            }, new { id }, splitOn: "id").FirstOrDefault();
 
     }

@@ -75,6 +75,9 @@
                   </div>
                   <!-- </router-link> -->
                 </div>
+                <div class="col-md-12 p-0 justify-content-center d-flex mt-5">
+                  <i @click="deleteKeep(keep.id)" class="fas fa-trash-alt   red fa-2x" v-if="keep.creatorId === account.id"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -91,6 +94,8 @@ import { computed } from '@vue/runtime-core'
 import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import { accountService } from '../services/AccountService'
+import { keepsService } from '../services/KeepsService'
+import Pop from '../utils/Notifier'
 export default {
   props: {
     keep: {
@@ -100,6 +105,13 @@ export default {
   },
   setup() {
     return {
+      async deleteKeep(id) {
+        try {
+          await keepsService.deleteKeep(id)
+        } catch (error) {
+          Pop.toast(error, 'error')
+        }
+      },
       pushtoProfilePage(id, keepId) {
         router.push(`/profiles/${id}`)
         $('#modal' + keepId).modal('hide')
@@ -110,7 +122,8 @@ export default {
         logger.log(AppState.activeKeep)
         logger.log(AppState.accountVaults)
       },
-      accountVaults: computed(() => AppState.accountVaults)
+      accountVaults: computed(() => AppState.accountVaults),
+      account: computed(() => AppState.account)
     }
   }
 }
@@ -135,6 +148,9 @@ cursor: pointer;
 }
 .rounded {
   border-radius: 10%;
+}
+.red {
+  color: red;
 }
 
 </style>
