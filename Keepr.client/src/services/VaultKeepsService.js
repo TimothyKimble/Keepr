@@ -40,6 +40,11 @@ class VaultKeepsService {
       Pop.toast(error, 'error')
     }
   }
+
+  async removeKeep(vaultKeepId) {
+    await api.delete('api/vaultKeeps/' + vaultKeepId)
+    AppState.vaultKeeps = AppState.vaultKeeps.filter(vaultKeep => vaultKeep.id !== vaultKeepId)
+  }
 }
 
 export const vaultKeepsService = new VaultKeepsService()

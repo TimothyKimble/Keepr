@@ -1,5 +1,5 @@
 <template>
-  <div @click="pushToVaultPage(vault)" class="component card grow">
+  <div @click="pushToVaultPage(vault), setActiveVault(vault)" class="component card grow">
     <img class="card-img" :src="vault.img" alt="">
     <div class="card-img-overlay d-flex justify-content-between align-items-end">
       <h4 class="card-title text-light text-shadow">
@@ -30,6 +30,9 @@ export default {
         } else {
           router.push('/')
         }
+      },
+      setActiveVault(vault) {
+        AppState.activeVault = vault
       }
     }
   }

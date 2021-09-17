@@ -9,7 +9,7 @@
           <i @click="deleteVault(vault.id)" class="fas fa-trash-alt red fa-2x"></i>
         </div>
         <div class="card-columns">
-          <VaultKeepsCard v-for="vk in vaultKeeps" :key="vk.id" :vault-keep="vk" />
+          <VaultKeepsCard v-for="k in vaultKeeps" :key="k.id" :keep="k" />
         </div>
       </div>
     </div>
