@@ -13,7 +13,7 @@
           <h5 class="modal-title">
             Create New Keep
           </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="close modal">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -27,6 +27,10 @@
                      id="name"
                      name="name"
                      class="form-control"
+                     required
+                     minlength="3"
+                     maxlength="50"
+                     title="Name for Keep"
               >
               <label for="description">Description</label>
               <textarea v-model="state.newKeep.description"
@@ -37,6 +41,7 @@
                         rows="3"
                         minlength="3"
                         required
+                        title="Description for Keep"
               ></textarea>
               <label for="img">Image</label>
               <input type="text"
@@ -45,12 +50,15 @@
                      id="img"
                      name="img"
                      class="form-control"
+                     required
+                     minlength="10"
+                     title="Image URL"
               >
             </div>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Close Keep Creation Modal">
               Close
             </button>
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" title="Create Keep Button">
               Create
             </button>
           </form>

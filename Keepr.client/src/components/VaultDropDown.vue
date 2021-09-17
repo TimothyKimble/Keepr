@@ -35,12 +35,20 @@ export default {
           state.newVaultKeep.vaultId = vault.id
           state.newVaultKeep.keepId = AppState.activeKeep.id
           const keep = await keepsService.getKeepById(state.newVaultKeep.keepId)
-          await vaultKeepsService.increaseKeeps(keep)
-          await vaultKeepsService.createVaultKeep(state.newVaultKeep)
+          await vaultKeepsService.createVaultKeep(state.newVaultKeep, keep)
           state.newVaultKeep = {}
+          AppState.activeKeep.keeps++
           Pop.toast('Created VaultKeep', 'success')
         } catch (error) {
           Pop.toast('Did not create vaultKeep', 'error')
+        }
+      },
+      async increaseKeeps() {
+        try {
+          const keep = await keepsService.getKeepById(state.newVaultKeep.keepId)
+          await vaultKeepsService.increaseKeeps(keep)
+        } catch (error) {
+          Pop.toast('Did not increase Keeps', 'error')
         }
       }
     }

@@ -31,10 +31,13 @@ class VaultKeepsService {
     }
   }
 
-  async createVaultKeep(newVaultKeep) {
+  async createVaultKeep(newVaultKeep, keep) {
     try {
       const res = await api.post('api/vaultKeeps', newVaultKeep)
       AppState.vaultKeeps.push(res.data)
+      keep.keeps++
+      const increase = await api.put('api/keeps/' + keep.id, keep)
+      keep = increase.data
       return AppState.vaultKeeps
     } catch (error) {
       Pop.toast(error, 'error')

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid p-1 mt-1">
+  <div class="container-fluid p-1 m-3">
     <div class="card-columns">
       <KeepsCard v-for="k in keeps" :key="k.id" :keep="k" />
     </div>

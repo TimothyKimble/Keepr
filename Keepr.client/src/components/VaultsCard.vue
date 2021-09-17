@@ -1,13 +1,15 @@
 <template>
-  <div @click="pushToVaultPage(vault), setActiveVault(vault)" class="component card grow">
-    <img class="card-img" :src="vault.img" alt="">
-    <div class="card-img-overlay d-flex justify-content-between align-items-end">
-      <h4 class="card-title text-light text-shadow">
-        {{ vault.name }}
-      </h4>
-      <img class="rounded-circle profileImage" :src="vault.creator.picture" alt="">
+  <router-link :to="{name: 'VaultPage', params: {id: vault.id}}">
+    <div class="component card grow">
+      <img class="card-img" :src="vault.img" alt="">
+      <div class="card-img-overlay d-flex justify-content-between align-items-end">
+        <h4 class="card-title text-light text-shadow">
+          {{ vault.name }}
+        </h4>
+        <img class="rounded-circle profileImage" :src="vault.creator.picture" alt="">
+      </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -22,18 +24,6 @@ export default {
   },
   setup() {
     return {
-      pushToVaultPage(vault) {
-        if (AppState.account.id === vault.creator.id && vault.isPrivate === true) {
-          router.push(`/vaults/${vault.id}/keeps`)
-        } else if (vault.isPrivate === false) {
-          router.push(`/vaults/${vault.id}/keeps`)
-        } else {
-          router.push('/')
-        }
-      },
-      setActiveVault(vault) {
-        AppState.activeVault = vault
-      }
     }
   }
 }

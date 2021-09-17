@@ -1,11 +1,11 @@
 <template>
-  <div class="container-fluid p-0 ProfilePage">
+  <div class="container-fluid p-1 m-3 ProfilePage">
     <div class="row m-0 w-100 d-flex justify-content-center mt-4">
       <div class="col-md-1 col-1 p-0">
-        <img class="img" :src="profile.picture" alt="" />
+        <img class="img" :src="profile.picture" alt="" :title="profile.name" />
       </div>
-      <div class="col-md-9 p-2 align-items-start d-flex flex-column justify-content-center">
-        <h5>{{ profile.name }}</h5>
+      <div class="col-md-9 px-3 align-items-start d-flex flex-column justify-content-center">
+        <h3>{{ profile.name }}</h3>
         <h6>Keeps: {{ keeps.length }}</h6>
         <h6>Vaults: {{ vaults.length }}</h6>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div @click="changeActiveKeep(keep), increaseViews(keep)" class="component card grow border border-dark rounded" data-toggle="modal" :data-target="'#modal' + keep.id">
+  <div @click="changeActiveKeep(keep), increaseViews(keep)" class="component card grow border border-dark rounded" data-toggle="modal" :data-target="'#modal' + keep.id" :title="keep.name">
     <img class="card-img" :src="keep.img" alt="">
     <div class="card-img-overlay d-flex justify-content-between align-items-end">
       <h4 class="card-title text-light text-shadow">
@@ -23,37 +23,48 @@
         <div class="modal-body">
           <div class="row m-0 w-100 d-flex">
             <div class="col-md-6 p-0 d-flex align-items-center">
-              <img class="w-100" :src="keep.img" alt="">
+              <img class="w-100" :src="keep.img" alt="" :title="keep.img">
             </div>
             <div class="col-md-6 p-0">
               <div class="row m-0 w-100 d-flex justify-content-center">
                 <div class="col-md-12 p-0 d-flex justify-content-end">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close modal">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="col-md-12 p-0 d-flex justify-content-around">
                   <div class="row m-0 w-100">
                     <div class="col-md-6 p-0 text-center">
-                      <i class="fas fa-eye"></i>
+                      <i class="fas fa-eye" title="Keep Views"></i>
                       <p>{{ keep.views }}</p>
                     </div>
                     <div class="col-md-6 p-0 text-center">
-                      <i class="fab fa-kickstarter"></i>
+                      <i class="fab fa-kickstarter" title="Keep Keeps"></i>
                       <p>{{ keep.keeps }}</p>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-12 p-0 text-center">
-                  <h5>{{ keep.name }}</h5>
+                <div class="row m-0 w-100 p-1">
+                  <div class="col-md-12 p-0 text-center mt-2">
+                    <h5>{{ keep.name }}</h5>
+                  </div>
+                  <div class="col-md-12 col-8 p-2">
+                    <p>{{ keep.description }}</p>
+                  </div>
                 </div>
-                <div class="col-md-12 col-8 p-2">
-                  <p>{{ keep.description }}</p>
-                </div>
-                <div class="col-md-12 col-8 p-0 d-flex justify-content-between">
-                  <div class="row m-0 w-100 my-4">
+              </div>
+            </div>
+            <div class="col-md-12 p-0">
+              <div class="row m-0 w-100">
+                <div class="col-md-12 col-8 p-0 d-flex justify-content-between mt-2">
+                  <div class="row m-0 w-100 ">
+                    <div class="col-md-6 col-6 p-4 d-flex justify-content-center " v-if="account.id === vault.creator.id">
+                      <button @click="removeFromVault(keep.vaultKeepId, vault.id, keep.id)" class="btn btn-danger" title="Remove keep from vault">
+                        Remove From Vault
+                      </button>
+                    </div>
                     <!-- <router-link :to="{name: 'Profile', params:{id: keep.creator.id}}"> -->
-                    <div class="col-md-12 col-12 p-2 flex-wrap my-2 ">
+                    <div class="col-md-6 col-6 p-2 flex-wrap my-2 ">
                       <div class="row m-0 w-100 d-flex justify-content-between">
                         <div class="col-md-3 col-3 p-0">
                           <img @click="pushtoProfilePage(keep.creator.id, keep.id)" :src="keep.creator.picture" class="w-100 rounded-circle " :alt="keep.creator.name" :title="keep.creator.name">
@@ -63,16 +74,11 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-12 col-12 p-0 d-flex justify-content-center ">
-                      <button @click="removeFromVault(keep.vaultKeepId, vault.id, keep.id)" class="btn btn-danger">
-                        Remove From Vault
-                      </button>
-                    </div>
                   </div>
                   <!-- </router-link> -->
                 </div>
                 <div class="col-md-12 p-0 justify-content-center d-flex">
-                  <i @click="deleteKeep(keep.id)" class="fas fa-trash-alt   red fa-2x" v-if="keep.creatorId === account.id"></i>
+                  <i @click="deleteKeep(keep.id)" class="fas fa-trash-alt IconCursor  red fa-2x" v-if="keep.creator.id === account.id" title="Delete Keep"></i>
                 </div>
               </div>
             </div>
@@ -134,7 +140,8 @@ export default {
       },
       accountVaults: computed(() => AppState.accountVaults),
       account: computed(() => AppState.account),
-      vault: computed(() => AppState.activeVault)
+      vault: computed(() => AppState.activeVault),
+      user: computed(() => AppState.user)
     }
   }
 }

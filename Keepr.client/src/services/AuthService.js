@@ -27,7 +27,7 @@ AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async function() {
 
   // NOTE if there is something you want to do once the user is authenticated, place that here
   await accountService.getAccountVaults(AppState.account.id)
-  await accountService.getAccount()
+  await accountService.getAccountKeeps(AppState.account.id)
 })
 
 async function refreshAuthToken(config) {

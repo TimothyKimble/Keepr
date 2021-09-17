@@ -16,8 +16,8 @@ class AccountService {
 
   async getAccountKeeps(id) {
     const res = await api.get('api/profiles/' + id + '/keeps')
-    AppState.keeps = res.data
-    return AppState.keeps
+    AppState.accountKeeps = res.data
+    return AppState.accountKeeps
   }
 
   async getAccountVaults(id) {

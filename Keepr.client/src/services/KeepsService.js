@@ -29,7 +29,7 @@ class KeepsService {
   async createKeep(newKeep) {
     try {
       const res = await api.post('api/keeps', newKeep)
-      AppState.keeps.push(res.data)
+      AppState.accountKeeps.push(res.data)
       return res.data
     } catch (error) {
       logger.error("Couldn't Post keep", error)

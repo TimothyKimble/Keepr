@@ -13,12 +13,12 @@
           <h5 class="modal-title">
             Create New Vault
           </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close modal">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <form @submit.prevent="createVault">
+          <form @submit.prevent="createVault(), reset()">
             <div class="form-group">
               <label for="name">Name</label>
               <input type="text"
@@ -27,6 +27,10 @@
                      id="name"
                      name="name"
                      class="form-control"
+                     title="Name for vault"
+                     required
+                     minlength="3"
+                     maxlength="50"
               >
               <label for="description">Description</label>
               <textarea v-model="state.newVault.description"
@@ -37,6 +41,7 @@
                         rows="3"
                         minlength="3"
                         required
+                        title="Description for vault"
               ></textarea>
               <label for="img">Image</label>
               <input type="text"
@@ -45,22 +50,36 @@
                      id="img"
                      name="img"
                      class="form-control"
+                     required
+                     title="Image URL for vault"
               >
-              <label for="isPrivate">Is this Private?</label>
-              <input type="checkbox"
-                     v-model="state.newVault.isPrivate"
-                     placeholder="checkbox for isPrivate"
-                     id="isPrivate"
-                     name="isPrivate"
-                     class="form-control"
-              >
+              <div class="row d-flex justify-content-center mt-3 m-0 w-100">
+                <div class="col-md-3 p-0">
+                  <label class="text-center my-2" for="isPrivate">Is this Private?</label>
+                </div>
+                <div class="col-md-1 p-0">
+                  <input type="checkbox"
+                         v-model="state.newVault.isPrivate"
+                         placeholder="checkbox for isPrivate"
+                         id="isPrivate"
+                         name="isPrivate"
+                         class="form-control"
+                         title="Checkbox for making private"
+                  >
+                </div>
+                <div class="col-md-12 p-0 text-center">
+                  <p><em>Only you will see this vault</em> </p>
+                </div>
+              </div>
             </div>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-              Close
-            </button>
-            <button type="submit" class="btn btn-primary">
-              Create
-            </button>
+            <div class="row m-0 w-100 d-flex justify-content-between">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Close vault creation modal">
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary" title="Create vault">
+                Create
+              </button>
+            </div>
           </form>
         </div>
       </div>

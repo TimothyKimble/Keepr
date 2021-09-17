@@ -1,13 +1,13 @@
 <template>
-  <div class="container-fluid p-0">
+  <div class="container-fluid p-1 m-3">
     <div class="row m-0 w-100 d-flex justify-content-center mt-4">
       <div class="col-md-1 col-1 p-0">
-        <img class="img" :src="account.picture" alt="" />
+        <img class="img" :src="account.picture" alt="" :title="account.name" />
       </div>
-      <div class="col-md-9 p-2 align-items-start d-flex flex-column justify-content-center">
-        <h5>{{ account.name }}</h5>
-        <h6>Keeps: {{ keeps.length }}</h6>
-        <h6>Vaults: {{ vaults.length }}</h6>
+      <div class="col-md-9 px-3 align-items-start d-flex flex-column justify-content-center text-break">
+        <h3>{{ account.name }}</h3>
+        <h6>Keeps: {{ keeps?.length }}</h6>
+        <h6>Vaults: {{ vaults?.length }}</h6>
       </div>
     </div>
     <div class="row m-0 w-100">
@@ -15,9 +15,9 @@
         <h3 class="p-2">
           Vaults
         </h3>
-        <i class="fas fa-plus-circle fa-2x p-2 AddIconColor grow" data-toggle="modal" data-target="#createVaultModal"></i>
+        <i class="fas fa-plus-circle fa-2x p-2 AddIconColor grow" data-toggle="modal" data-target="#createVaultModal" title="Add Vault"></i>
       </div>
-      <div class="card-columns">
+      <div class="card-columns ">
         <VaultsCard v-for="v in vaults" :key="v.id" :vault="v" />
       </div>
     </div>
@@ -26,7 +26,7 @@
         <h3 class="p-2">
           Keeps
         </h3>
-        <i class="fas fa-plus-circle fa-2x p-2 AddIconColor grow" data-toggle="modal" data-target="#createKeepModal"></i>
+        <i class="fas fa-plus-circle fa-2x p-2 AddIconColor grow" data-toggle="modal" data-target="#createKeepModal" title="Add Keep"></i>
       </div>
       <div class="card-columns">
         <KeepsCard v-for="k in keeps" :key="k.id" :keep="k" />
@@ -48,15 +48,15 @@ export default {
   setup() {
     onMounted(async() => {
       try {
-        await accountService.getAccountKeeps(AppState.account.id)
         await accountService.getAccountVaults(AppState.account.id)
+        await accountService.getAccountKeeps(AppState.account.id)
       } catch (error) {
         Pop.toast(error, 'error')
       }
     })
     return {
       account: computed(() => AppState.account),
-      keeps: computed(() => AppState.keeps),
+      keeps: computed(() => AppState.accountKeeps),
       vaults: computed(() => AppState.accountVaults)
     }
   }
