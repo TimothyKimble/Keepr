@@ -19,11 +19,13 @@ class VaultKeepsService {
 
   async increaseKeeps(keep) {
     try {
-      keep.keeps++
-      const res = await api.put('api/keeps/' + keep.id, keep)
-      logger.log(res.data)
-      AppState.activeKeep = res.data
-      return AppState.activeKeep
+      if (AppState.account !== keep.creator.id) {
+        keep.keeps++
+        const res = await api.put('api/keeps/' + keep.id, keep)
+        logger.log(res.data)
+        keep = res.data
+      }
+      return keep
     } catch (error) {
       logger.log(error)
     }

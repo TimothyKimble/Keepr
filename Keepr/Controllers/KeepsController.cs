@@ -77,13 +77,15 @@ namespace Keepr.Controllers
         editedKeep.CreatorId = userInfo.Id;
         editedKeep.Id = id;
         Keep keep = _service.Update(editedKeep);
-        return Ok(keep);
+        editedKeep.Creator = userInfo;
+        return Ok(editedKeep);
       }
       catch (Exception err)
       {
         return BadRequest(err.Message);
       }
     }
+
 
     [HttpDelete("{id}")]
     [Authorize]

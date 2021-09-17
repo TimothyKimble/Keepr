@@ -25,8 +25,7 @@ class VaultsService {
   async createVault(newVault) {
     try {
       const res = await api.post('api/vaults', newVault)
-      AppState.vaults.push(res.data)
-      return AppState.vaults
+      AppState.accountVaults.push(res.data)
     } catch (error) {
       logger.error("Couldn't Post Vault", error)
     }

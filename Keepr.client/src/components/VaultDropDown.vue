@@ -1,7 +1,13 @@
 <template>
-  <button @click="createVaultKeep(vault)" class="dropdown-item">
-    {{ vault.name }}
-  </button>
+  <div class="row m-0 w-100">
+    <div class="col-md-12 p-0 text-break">
+      <button @click="createVaultKeep(vault)" class="dropdown-item text-break p-0">
+        <p class="m-0 text-break">
+          {{ vault.name }}
+        </p>
+      </button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -9,6 +15,7 @@ import { reactive } from '@vue/runtime-core'
 import { AppState } from '../AppState'
 import Pop from '../utils/Notifier'
 import { vaultKeepsService } from '../services/VaultKeepsService'
+import { keepsService } from '../services/KeepsService'
 export default {
   name: 'Component',
   props: {
@@ -25,11 +32,12 @@ export default {
       state,
       async createVaultKeep(vault) {
         try {
-          await vaultKeepsService.increaseKeeps(AppState.activeKeep)
-          state.newVaultKeep.Creator = AppState.activeKeep.Creator
           state.newVaultKeep.vaultId = vault.id
           state.newVaultKeep.keepId = AppState.activeKeep.id
+          const keep = await keepsService.getKeepById(state.newVaultKeep.keepId)
+          await vaultKeepsService.increaseKeeps(keep)
           await vaultKeepsService.createVaultKeep(state.newVaultKeep)
+          state.newVaultKeep = {}
           Pop.toast('Created VaultKeep', 'success')
         } catch (error) {
           Pop.toast('Did not create vaultKeep', 'error')

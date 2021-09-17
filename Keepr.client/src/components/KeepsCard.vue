@@ -1,5 +1,5 @@
 <template>
-  <div @click="changeActiveKeep(keep)" class="component card grow border border-dark rounded" data-toggle="modal" :data-target="'#modal' + keep.id">
+  <div @click="changeActiveKeep(keep), increaseViews(keep)" class="component card grow border border-dark rounded" data-toggle="modal" :data-target="'#modal' + keep.id">
     <img class="card-img" :src="keep.img" alt="">
     <div class="card-img-overlay d-flex justify-content-between align-items-end">
       <h4 class="card-title text-light text-shadow">
@@ -66,7 +66,7 @@
                       >
                         Dropdown
                       </button>
-                      <div class="w-100 dropdown-menu" aria-labelledby="dropdownMenu2">
+                      <div class="col-md-6 w-100 dropdown-menu" aria-labelledby="dropdownMenu2">
                         <VaultDropDown v-for="v in accountVaults" :key="v.id" :vault="v" />
                       </div>
                     </div>
@@ -116,12 +116,13 @@ export default {
         router.push(`/profiles/${id}`)
         $('#modal' + keepId).modal('hide')
       },
-      async changeActiveKeep(keep) {
-        await accountService.getAccountVaults(AppState.account.id)
-        AppState.activeKeep = keep
-        logger.log(AppState.activeKeep)
-        logger.log(AppState.accountVaults)
+      async increaseViews(keep) {
+        await keepsService.increaseViews(keep)
       },
+      async changeActiveKeep(keep) {
+        AppState.activeKeep = keep
+      },
+
       accountVaults: computed(() => AppState.accountVaults),
       account: computed(() => AppState.account)
     }

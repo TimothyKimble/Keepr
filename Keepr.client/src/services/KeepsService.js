@@ -21,7 +21,7 @@ class KeepsService {
       const res = await api.get('api/keeps/' + id)
       logger.log(res.data)
       AppState.keeps.push(res.data)
-      return AppState.keeps
+      return res.data
     } catch (error) {
       logger.error("Couldn't get Keep", error)
     }
@@ -31,8 +31,23 @@ class KeepsService {
     try {
       const res = await api.post('api/keeps', newKeep)
       AppState.keeps.push(res.data)
+      return res.data
     } catch (error) {
       logger.error("Couldn't Post keep", error)
+    }
+  }
+
+  async increaseViews(keep) {
+    try {
+      if (AppState.account !== keep.creator.id) {
+        keep.views++
+        const res = await api.put('api/keeps/' + keep.id, keep)
+        logger.log(res.data)
+        keep = res.data
+      }
+      return keep
+    } catch (error) {
+      logger.log(error)
     }
   }
 

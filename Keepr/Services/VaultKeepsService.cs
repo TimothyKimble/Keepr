@@ -24,6 +24,9 @@ namespace Keepr.Services
       {
         throw new Exception("invalid Id");
       }
+      Keep foundKeep = _keepsRepository.GetKeepById(newVaultKeep.KeepId);
+      foundKeep.Keeps++;
+      _keepsRepository.Update(foundKeep);
       return _repo.Create(newVaultKeep);
     }
 
