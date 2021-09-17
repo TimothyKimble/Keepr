@@ -99,14 +99,14 @@ namespace Keepr.Repositories
       k.*,
       vk.id AS vaultKeepId
       FROM vaultKeeps vk
-      JOIN accounts a ON vk.creatorId = a.id
-      JOIN keeps k on vk.keepId = k.id
-      WHERE vk.vaultId = @id;";
+      JOIN keeps k on k.id = vk.keepId
+      JOIN accounts a ON a.id = k.creatorId
+      WHERE vaultId = @id;";
       return _db.Query<Profile, KeepViewModel, KeepViewModel>(sql, (prof, keep) =>
       {
         keep.Creator = prof;
         return keep;
-      }, new { id }, splitOn: "id").ToList();
+      }, new { id }, splitOn: "id").ToList<KeepViewModel>();
     }
 
     internal void Delete(int id)

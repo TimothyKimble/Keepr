@@ -1,7 +1,7 @@
 <template>
   <div class="component row m-0 w-100">
     <div class="col-md-12 p-0">
-      <div class="row m-0 w-100 my-3">
+      <div class="row m-0 w-100 my-3 p-3">
         <div class="col-md-12 p-0 text-center my-2">
           <h1>{{ vault.name }}</h1>
         </div>
@@ -24,13 +24,18 @@ import { AppState } from '../AppState'
 import { vaultsService } from '../services/VaultsService'
 import Pop from '../utils/Notifier'
 import { keepsService } from '../services/KeepsService'
+import { router } from '../router'
 export default {
   name: 'Component',
   setup() {
     const route = useRoute()
     onMounted(async() => {
-      await vaultsService.getVaultById(route.params.id)
-      await vaultKeepsService.getKeepsByVaultId(route.params.id)
+      try {
+        await vaultsService.getVaultById(route.params.id)
+        await vaultKeepsService.getKeepsByVaultId(route.params.id)
+      } catch (error) {
+        router.push('/')
+      }
     })
     return {
       async getKeepById(keepId) {

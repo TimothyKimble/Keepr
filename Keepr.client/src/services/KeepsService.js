@@ -20,7 +20,6 @@ class KeepsService {
     try {
       const res = await api.get('api/keeps/' + id)
       logger.log(res.data)
-      AppState.keeps.push(res.data)
       return res.data
     } catch (error) {
       logger.error("Couldn't get Keep", error)

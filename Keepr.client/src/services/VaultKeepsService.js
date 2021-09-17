@@ -11,7 +11,7 @@ class VaultKeepsService {
       const res = await api.get('api/vaults/' + vaultId + '/keeps')
       AppState.vaultKeeps = res.data
       logger.log(res.data)
-      return AppState.vaultKeeps
+      AppState.vaultKeeps = res.data
     } catch (error) {
       logger.log(error)
     }

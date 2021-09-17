@@ -48,7 +48,6 @@ export default {
   setup() {
     onMounted(async() => {
       try {
-        await accountService.getAccount()
         await accountService.getAccountKeeps(AppState.account.id)
         await accountService.getAccountVaults(AppState.account.id)
       } catch (error) {
