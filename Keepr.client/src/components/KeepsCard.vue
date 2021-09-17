@@ -26,7 +26,7 @@
               <img class="w-100" :src="keep.img" alt="">
             </div>
             <div class="col-md-6 p-0">
-              <div class="row m-0 w-100">
+              <div class="row m-0 w-100 d-flex justify-content-center">
                 <div class="col-md-12 p-0 d-flex justify-content-end">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -34,16 +34,12 @@
                 </div>
                 <div class="col-md-12 p-0 d-flex justify-content-around">
                   <div class="row m-0 w-100">
-                    <div class="col-md-4 p-0 text-center">
+                    <div class="col-md-6 p-0 text-center">
                       <i class="fas fa-eye"></i>
                       <p>{{ keep.views }}</p>
                     </div>
-                    <div class="col-md-4 p-0 text-center">
+                    <div class="col-md-6 p-0 text-center">
                       <i class="fab fa-kickstarter"></i>
-                      <p>{{ keep.keeps }}</p>
-                    </div>
-                    <div class="col-md-4 p-0 text-center">
-                      <i class="fas fa-share-alt-square"></i>
                       <p>{{ keep.keeps }}</p>
                     </div>
                   </div>
@@ -51,12 +47,12 @@
                 <div class="col-md-12 p-0 text-center">
                   <h5>{{ keep.name }}</h5>
                 </div>
-                <div class="col-md-12 p-2">
+                <div class="col-md-12 col-8 p-2">
                   <p>{{ keep.description }}</p>
                 </div>
-                <div class="col-md-12 p-0 d-flex justify-content-between">
-                  <div class="row m-0 w-100">
-                    <div class="col-md-8 p-0 dropdown">
+                <div class="col-md-12 col-8 p-0 d-flex justify-content-between">
+                  <div class="row m-0 w-100 my-4">
+                    <div class="col-md-12 col-12 p-0 d-flex justify-content-center dropdown">
                       <button class="btn btn-primary dropdown-toggle"
                               type="button"
                               id="dropdownMenu2"
@@ -64,18 +60,27 @@
                               aria-haspopup="true"
                               aria-expanded="false"
                       >
-                        Dropdown
+                        Add to Vault
                       </button>
-                      <div class="col-md-6 w-100 dropdown-menu" aria-labelledby="dropdownMenu2">
+                      <div class="col-md-12 col-12 w-100 dropdown-menu p-0" aria-labelledby="dropdownMenu2">
                         <VaultDropDown v-for="v in accountVaults" :key="v.id" :vault="v" />
                       </div>
                     </div>
                     <!-- <router-link :to="{name: 'Profile', params:{id: keep.creator.id}}"> -->
-                    <img @click="pushtoProfilePage(keep.creator.id, keep.id)" :src="keep.creator.picture" class="profileImage rounded-circle " alt="">
+                    <div class="col-md-12 col-12 p-2 flex-wrap my-2 ">
+                      <div class="row m-0 w-100 d-flex justify-content-between">
+                        <div class="col-md-3 col-3 p-0">
+                          <img @click="pushtoProfilePage(keep.creator.id, keep.id)" :src="keep.creator.picture" class="w-100 rounded-circle " :alt="keep.creator.name" :title="keep.creator.name">
+                        </div>
+                        <div class="col-md-8 col-8 p-0 text-wrap text-break">
+                          <p>{{ keep.creator.name }}</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <!-- </router-link> -->
                 </div>
-                <div class="col-md-12 p-0 justify-content-center d-flex mt-5">
+                <div class="col-md-12 p-0 justify-content-center d-flex">
                   <i @click="deleteKeep(keep.id)" class="fas fa-trash-alt   red fa-2x" v-if="keep.creatorId === account.id"></i>
                 </div>
               </div>
